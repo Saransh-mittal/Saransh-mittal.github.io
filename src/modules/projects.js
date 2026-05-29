@@ -91,14 +91,21 @@ export function initProjects(siteData) {
       engine = initFrameEngine(canvas, p, null);
     }
 
+    // On touch / single-column layouts use a gentler effect: a pure vertical
+    // parallax with no rotation or scale, so frames stay flat and never skew
+    // or overflow — but the image still moves with scroll.
+    const reduce = window.matchMedia('(max-width: 1000px)');
+
     // Entrance fade for the device
-    gsap.set(deviceStack, { opacity: 0, y: 60, rotate: 2.5, scale: 0.95 });
+    gsap.set(deviceStack, reduce.matches
+      ? { opacity: 0, y: 40 }
+      : { opacity: 0, y: 60, rotate: 2.5, scale: 0.95 });
     gsap.to(deviceStack, {
       opacity: 1, duration: 0.8, ease: 'power2.out',
       scrollTrigger: { trigger: article, start: 'top 85%', toggleActions: 'play none none none' },
     });
 
-    // Scroll-tied tilt / lift / scale + frame scrub
+    // Scroll-tied parallax (+ tilt/scale on desktop) and frame scrub
     ScrollTrigger.create({
       trigger: article,
       start: 'top bottom',
@@ -106,11 +113,15 @@ export function initProjects(siteData) {
       scrub: true,
       onUpdate: (self) => {
         const t = clamp((self.progress - 0.15) / 0.7, 0, 1);
-        gsap.set(deviceStack, {
-          y: lerp(60, -30, t),
-          rotate: lerp(2.5, -1.5, t),
-          scale: lerp(0.95, 1, clamp(t * 1.4, 0, 1)),
-        });
+        if (reduce.matches) {
+          gsap.set(deviceStack, { y: lerp(48, -48, t), rotate: 0, scale: 1 });
+        } else {
+          gsap.set(deviceStack, {
+            y: lerp(60, -30, t),
+            rotate: lerp(2.5, -1.5, t),
+            scale: lerp(0.95, 1, clamp(t * 1.4, 0, 1)),
+          });
+        }
         if (engine?.update) engine.update(self.progress);
       },
     });

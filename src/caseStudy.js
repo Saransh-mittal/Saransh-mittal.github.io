@@ -63,7 +63,7 @@ function renderCaseStudy(cs) {
 
   return `
     <nav class="cs-nav">
-      <a href="/index.html#work" class="back">
+      <a href="/index.html" class="back">
         <span class="arr" aria-hidden="true">←</span>
         <span>Back to portfolio</span>
       </a>

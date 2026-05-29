@@ -33,6 +33,26 @@ lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => lenis.raf(time * 1000));
 gsap.ticker.lagSmoothing(0);
 
+// ─── Scroll position persistence ────────────────────────────
+// Remember where the visitor was so returning from a case study lands them
+// back at the same spot instead of the top. We manage this ourselves, so
+// turn off the browser's own (conflicting) scroll restoration.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+const SCROLL_KEY = 'sm:portfolioScroll';
+
+function cameFromCaseStudy() {
+  try {
+    if (!document.referrer) return false;
+    const u = new URL(document.referrer);
+    return u.host === location.host && /\/case-study\.html$/.test(u.pathname);
+  } catch (e) { return false; }
+}
+
+// Persist scroll when navigating away (into a case study, etc.)
+window.addEventListener('pagehide', () => {
+  try { sessionStorage.setItem(SCROLL_KEY, String(window.scrollY)); } catch (e) { /* private mode */ }
+});
+
 // ─── Boot ───────────────────────────────────────────────────
 async function boot() {
   // Build DOM + behaviours from the single source of truth
@@ -50,12 +70,27 @@ async function boot() {
   await initPreloader(siteData);
 
   const main = document.getElementById('main-content');
+
+  // If we're returning from a case study, skip the entrance animation and
+  // restore the previous scroll position so it feels continuous.
+  const returning = cameFromCaseStudy();
+  initReveal(document, { immediate: returning });
+  ScrollTrigger.refresh();
+
+  let restoreY = 0;
+  if (returning) {
+    try { restoreY = parseInt(sessionStorage.getItem(SCROLL_KEY) || '0', 10) || 0; } catch (e) { /* private mode */ }
+    // Jump to the saved spot while still hidden (layout is already computed),
+    // so there's no flash at the top before the restore.
+    if (restoreY > 0) lenis.scrollTo(restoreY, { immediate: true, force: true });
+  }
+
   main.style.visibility = 'visible';
 
-  // Trigger entrance reveals once the page is visible
-  initReveal();
-
-  ScrollTrigger.refresh();
+  // Re-sync triggers after the jump (transforms depend on final scroll pos).
+  if (restoreY > 0) {
+    requestAnimationFrame(() => { lenis.scrollTo(restoreY, { immediate: true, force: true }); ScrollTrigger.refresh(); });
+  }
 }
 
 boot();

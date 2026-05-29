@@ -6,9 +6,16 @@
 // Elements already in view at boot reveal immediately.
 // ============================================================
 
-export function initReveal(root = document) {
+export function initReveal(root = document, { immediate = false } = {}) {
   const els = root.querySelectorAll('.reveal, .reveal-stagger');
   if (!els.length) return;
+
+  // Returning visitors (e.g. coming back from a case study) have already
+  // seen the entrance — reveal everything at once instead of replaying it.
+  if (immediate) {
+    els.forEach((el) => el.classList.add('in'));
+    return;
+  }
 
   const inViewNow = (el) => {
     const r = el.getBoundingClientRect();
