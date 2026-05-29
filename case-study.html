@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Case Study — Saransh Mittal</title>
+  <meta name="description" content="Deep-dive case studies on Saransh Mittal's projects — DiscipLog, Quick Clash, Rapid Recap AI, and AI Yoga Guide: architecture, decisions, numbers, and lessons learned." />
+  <meta name="author" content="Saransh Mittal" />
+  <!-- Per-project pages are hash-routed and rendered client-side; keep crawlers on the portfolio. -->
+  <meta name="robots" content="noindex, follow" />
+
+  <!-- ─── Favicon ─── -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- ─── Open Graph ─── -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Case Study — Saransh Mittal" />
+  <meta property="og:description" content="Deep-dive case studies: architecture, decisions, numbers, and lessons learned." />
+  <meta property="og:image" content="https://saranshmittal.dev/og-image.png" />
+
+  <!-- ─── Fonts ─── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/case-study.css" />
+</head>
+<body>
+  <!-- Grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Custom cursor (magnetic ring + dot) -->
+  <div class="cursor-ring" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+  <!-- Case study content (hash-routed, rendered client-side) -->
+  <main id="cs-root" role="main">
+    <noscript>
+      <div style="padding: 120px 20px; max-width: 720px; margin: 0 auto;">
+        <h1>Case Studies — Saransh Mittal</h1>
+        <p>Per-project deep dives into DiscipLog, Quick Clash, Rapid Recap AI, and AI Yoga Guide.</p>
+        <p><a href="/index.html">← Back to portfolio</a></p>
+      </div>
+    </noscript>
+  </main>
+
+  <script type="module" src="/src/caseStudy.js"></script>
+</body>
+</html>

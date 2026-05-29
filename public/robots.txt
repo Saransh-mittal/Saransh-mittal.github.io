@@ -1,0 +1,10 @@
+# robots.txt — Saransh Mittal Portfolio
+User-agent: *
+Allow: /
+Disallow:
+
+# Sitemap
+Sitemap: https://saranshmittal.dev/sitemap.xml
+
+# Crawl-delay (optional, be polite)
+Crawl-delay: 1
