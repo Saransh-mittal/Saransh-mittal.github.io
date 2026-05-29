@@ -56,6 +56,11 @@ function renderCaseStudy(cs) {
   const next = caseStudies[cs.next] || caseStudies[FALLBACK];
   const { personal } = siteData;
 
+  // Mobile-only projects show a portrait hero frame instead of being
+  // stretched into the 16:9 landscape capture frame.
+  const project = siteData.projects.find((p) => p.id === cs.id);
+  const isPhone = (project?.device || 'laptop') === 'phone';
+
   return `
     <nav class="cs-nav">
       <a href="/index.html#work" class="back">
@@ -78,11 +83,18 @@ function renderCaseStudy(cs) {
       </div>
     </header>
 
-    <div class="cs-hero-img reveal">
+    <div class="cs-hero-img reveal${isPhone ? ' is-phone' : ''}">
       <div class="frame">
-        <div class="placeholder" style="position:absolute;inset:0">
+        <img
+          class="cs-hero-shot"
+          src="/frames/${esc(cs.id)}/frame_0001.webp"
+          alt="${esc(cs.name)} — product screen capture"
+          loading="lazy"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+        />
+        <div class="placeholder" style="position:absolute;inset:0;display:none">
           <span class="label">${esc(cs.name)} · hero capture</span>
-          <span class="ratio">/frames/${esc(cs.id)}/hero.webp</span>
+          <span class="ratio">/frames/${esc(cs.id)}/frame_0001.webp</span>
         </div>
       </div>
     </div>
